@@ -14,6 +14,7 @@ import { fileURLToPath } from 'url';
 // Recreate __filename and __dirname in ES module scope.
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 const templatesDir = path.join(__dirname, '../templates/pulumi');
 const templateFiles = fs.readdirSync(templatesDir).filter(file => file.endsWith('.tpl'));
 
@@ -43,10 +44,6 @@ export function createProject(projectName: string): void {
         console.error(chalk.red(`Error: Project directory "${projectName}" already exists.`));
         process.exit(1);
     }
-
-    // createProjectDirectory(projectDir);
-    // const templatesDir = path.join(__dirname, '../templates/pulumi');
-    // const templateFiles = fs.readdirSync(templatesDir).filter(file => file.endsWith('.tpl'));
 
     createProjectDirectory(projectDir);
     renderProjectTemplates(templateFiles, templatesDir, projectDir, projectName);
