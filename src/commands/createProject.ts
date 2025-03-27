@@ -170,7 +170,7 @@ function renderProjectTemplates(templateFiles: string[], templatesDir: string, p
 }
 
 function copyExamplesDirectory(projectDir: string) {
-    const examplesSrc = path.join(__dirname, '../../../examples');
+    const examplesSrc = path.join(__dirname, '../examples');
     const examplesDest = path.join(projectDir, 'examples');
     if (fs.existsSync(examplesSrc)) {
         copyDirectoryRecursive(examplesSrc, examplesDest);

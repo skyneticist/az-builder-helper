@@ -5,7 +5,7 @@
  */
 
 import { Command } from 'commander';
-import { createProject } from '../src/commands/createProject.js';
+import { createProject } from '../commands/createProject.js';
 
 const program = new Command();
 
