@@ -4,24 +4,8 @@
  * This ensures that non-TypeScript files (templates, etc.) are available in the build output.
  */
 
-import fs from 'fs';
 import path from 'path';
-
-function copyDirectory(src, dest) {
-  if (!fs.existsSync(dest)) {
-    fs.mkdirSync(dest, { recursive: true });
-  }
-  const entries = fs.readdirSync(src, { withFileTypes: true });
-  for (const entry of entries) {
-    const srcPath = path.join(src, entry.name);
-    const destPath = path.join(dest, entry.name);
-    if (entry.isDirectory()) {
-      copyDirectory(srcPath, destPath);
-    } else {
-      fs.copyFileSync(srcPath, destPath);
-    }
-  }
-}
+import { copyDirectory } from '../src/utils/fileUtils.ts';
 
 // Define source and destination directories for templates.
 const srcTemplates = path.join(process.cwd(), 'src', 'templates');

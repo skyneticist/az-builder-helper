@@ -3,7 +3,7 @@
  * This file uses Jest to test that placeholders in template strings are correctly replaced.
  */
 
-import { renderTemplate } from '../src/utils/templateUtils';
+import { renderTemplate } from '../src/utils/templateUtils.js';
 
 describe('renderTemplate', () => {
     it('should replace a single placeholder correctly', () => {

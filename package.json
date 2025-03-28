@@ -3,15 +3,15 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && npm run copy-assets",
-    "copy-assets": "node scripts/copy-assets.js",
+    "build": "tsc && npm run copy-assets && chmod +x dist/cli/azbuilder.js",
+    "copy-assets": "node scripts/copy-assets.js && cp -R src/templates dist/templates",
     "dev": "ts-node bin/azbuilder.ts",
     "start": "node dist/bin/azbuilder.js",
-    "test": "jest"
+    "test": "jest --roots tests"
   },
   "bin": {
-    "azbuilder": "./dist/bin/azbuilder.js",
-    "pulumime": "./dist/bin/azbuilder.js"
+    "azbuilder": "./dist/cli/azbuilder.js",
+    "pulumime": "./dist/cli/azbuilder.js"
   },
   "type": "module",
   "keywords": [],
