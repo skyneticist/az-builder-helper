@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 /**
  * CLI entry point for Azure Builder Helper.
  * This file parses command-line arguments and delegates commands.
