@@ -6,8 +6,8 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { spawn } from 'child_process';
 import chalk from 'chalk';
+import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import { renderTemplate } from '../utils/templateUtils.js';
 import { copyDirectory } from '../utils/fileUtils.js';
@@ -16,7 +16,7 @@ import { copyDirectory } from '../utils/fileUtils.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const templatesDir = path.join(__dirname, '../templates/pulumi');
+const templatesDir = path.join(__dirname, '../templates');
 const templateFiles = fs.readdirSync(templatesDir).filter(file => file.endsWith('.tpl'));
 
 /**
@@ -38,8 +38,27 @@ export function createProject(projectName: string): void {
     renderProjectTemplates(templateFiles, templatesDir, projectDir, projectName);
     copyExamplesDirectory(projectDir);
     createGitIgnore(templatesDir, projectDir, projectName);
+    createNpmRcFile(projectDir);
+    generateAzurePipelineYaml(projectDir); // Probably need to pass projectName
     createDefaultPackageJson(projectDir, projectName);
     installNpmDependencies(projectDir, projectName);
+}
+
+/**
+ * Generates an Azure Pipeline YAML file in the project directory.
+ * 
+ * @param projectDir - Absolute path to the project directory.
+ */
+function generateAzurePipelineYaml(projectDir: string) {
+    const azurePipelineTemplatePath = path.join(templatesDir, 'pipelines/azure-pipelines.yml.tpl');
+    const azurePipelineYamlPath = path.join(projectDir, 'azure-pipelines.yml');
+
+    if (fs.existsSync(azurePipelineTemplatePath)) {
+        const azurePipelineContent = fs.readFileSync(azurePipelineTemplatePath, 'utf8');
+        fs.writeFileSync(azurePipelineYamlPath, azurePipelineContent);
+    } else {
+        console.error(chalk.red(`\nError: Azure Pipeline template not found at ${chalk.magenta(azurePipelineTemplatePath)}`));
+    }
 }
 
 /**
@@ -174,3 +193,24 @@ function createGitIgnore(templatesDir: string, projectDir: string, projectName: 
         fs.writeFileSync(gitignoreDestPath, defaultGitignore);
     }
 }
+
+/**
+ * Creates a `.npmrc` file in the specified project directory using a template file.
+ *
+ * The `.npmrc` template file should be located in the templates directory.
+ * If the template file is not found, logs an error message.
+ *
+ * @param projectDir - The absolute path to the project directory where the `.npmrc` file will be created.
+ */
+function createNpmRcFile(projectDir: string) {
+    const npmRcTemplatePath = path.join(templatesDir, 'pipelines/.npmrc.tpl');
+    const npmRcPath = path.join(projectDir, '.npmrc');
+
+    if (fs.existsSync(npmRcTemplatePath)) {
+        const npmRcContent = fs.readFileSync(npmRcTemplatePath, 'utf8');
+        fs.writeFileSync(npmRcPath, npmRcContent, 'utf8');
+    } else {
+        console.error(chalk.red(`\nError: .npmrc template not found at ${chalk.magenta(npmRcTemplatePath)}`));
+    }
+}
+
