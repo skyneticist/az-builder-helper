@@ -17,17 +17,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const templatesDir = path.join(__dirname, '../templates');
-const pulumiTemplatesPath = path.join(templatesDir, 'pulumi');
-
-const pulumiTemplateFiles = fs.readdirSync(pulumiTemplatesPath, { withFileTypes: true })
-    .filter(dirent => dirent.isFile() && dirent.name.endsWith('.tpl'))
-    .map(dirent => dirent.name);
-
-if (pulumiTemplateFiles.length === 0) {
-    console.error(chalk.red(`\nError: No template files found in ${chalk.magenta(templatesDir)}.\n`));
-    console.error(chalk.red('Please ensure the templates directory contains .tpl files.'));
-    process.exit(1);
-}
 
 /**
  * Creates a new Pulumi project.
@@ -45,7 +34,7 @@ export function createProject(projectName: string): void {
 
     createProjectDirectory(projectDir);
     initializeGitRepository(projectDir);
-    renderProjectTemplates(pulumiTemplateFiles, pulumiTemplatesPath, projectDir, projectName);
+    renderProjectTemplates(templatesDir, projectDir, projectName);
     copyExamplesDirectory(projectDir);
     createGitIgnore(templatesDir, projectDir);
     createNpmRcFile(projectDir);
@@ -86,9 +75,21 @@ function initializeGitRepository(projectDir: string) {
  * @param projectDir - Path to the project directory.
  * @param projectName - Name of the project (used in template rendering).
  */
-function renderProjectTemplates(pulumiTemplates: string[], templatesDir: string, projectDir: string, projectName: string) {
-    pulumiTemplates.forEach((templateFile) => {
-        const templatePath = path.join(templatesDir, templateFile);
+function renderProjectTemplates(templatesDir: string, projectDir: string, projectName: string) {
+    const pulumiTemplatesPath = path.join(templatesDir, 'pulumi');
+
+    const pulumiTemplateFiles = fs.readdirSync(pulumiTemplatesPath, { withFileTypes: true })
+        .filter(dirent => dirent.isFile() && dirent.name.endsWith('.tpl'))
+        .map(dirent => dirent.name);
+
+    if (pulumiTemplateFiles.length === 0) {
+        console.error(chalk.red(`\nError: No template files found in ${chalk.magenta(templatesDir)}.\n`));
+        console.error(chalk.red('Please ensure the templates directory contains .tpl files.'));
+        process.exit(1);
+    }
+
+    pulumiTemplateFiles.forEach((templateFile) => {
+        const templatePath = path.join(pulumiTemplatesPath, templateFile);
         const outputFileName = templateFile.replace('.tpl', '');
         const outputPath = path.join(projectDir, outputFileName);
 
@@ -163,7 +164,7 @@ function createNpmRcFile(projectDir: string) {
 function generateAzurePipelineYaml(projectDir: string) {
     const azurePipelineTemplatePath = path.join(templatesDir, 'pipelines/azure-pipelines.yml.tpl');
     const azurePipelineYamlPath = path.join(projectDir, 'azure-pipelines.yml');
-    
+
     if (fs.existsSync(azurePipelineTemplatePath)) {
         const azurePipelineContent = fs.readFileSync(azurePipelineTemplatePath, 'utf8');
         fs.writeFileSync(azurePipelineYamlPath, azurePipelineContent);
