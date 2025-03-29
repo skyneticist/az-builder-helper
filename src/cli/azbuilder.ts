@@ -17,7 +17,7 @@ program
 
 program
     .command('new <projectName>')
-    .description('Creates a new Pulumi project with the specified project name')
+    .description('Creates a new Pulumi project using Azure Builder with the specified project name')
     .action((projectName: string) => {
         createProject(projectName);
     });
