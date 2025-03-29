@@ -5,6 +5,7 @@
   "scripts": {
     "build": "tsc && npm run copy-assets && chmod +x dist/cli/azbuilder.js",
     "copy-assets": "node scripts/copy-assets.js && cp -R src/templates dist/templates",
+    "link": "chmod +x scripts/build-link.js && node scripts/build-link.js",
     "dev": "ts-node bin/azbuilder.ts",
     "start": "node dist/bin/azbuilder.js",
     "test": "jest --roots tests"
