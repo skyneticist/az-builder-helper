@@ -1,10 +1,9 @@
-#!/usr/bin/env node
-/**
- * This script runs "npm run build" and, if that succeeds, then runs "npm link".
- * It works cross-platform (macOS, Linux, and Windows) because it's executed by Node.
- */
+
+// This script builds the project and links it globally.
+// Primarily used for development purposes.
 
 import { spawn } from 'child_process';
+import { chmodSync } from 'fs';
 
 /**
  * Runs a command with the provided arguments.
@@ -27,6 +26,9 @@ function runCommand(command, args) {
 
 async function main() {
   try {
+    console.log('Setting executable permissions for scripts...');
+    chmodSync('scripts/link.js', '755');
+
     console.log('Running "npm run build"...');
     await runCommand('npm', ['run', 'build']);
     console.log('"npm run build" completed successfully.');

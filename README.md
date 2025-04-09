@@ -2,14 +2,33 @@
 
 **Azure Builder Helper** is a CLI tool designed to scaffold new [Pulumi](https://www.pulumi.com/) projects. It automatically creates a project directory, populates it with starter files, copies over example resources, and installs dependencies. This tool helps engineers quickly spin up consistent Pulumi projects in a matter of seconds.
 
+
+## Important Steps
+
+### Manual Steps for Deployment
+
+To deploy the infrastructure defined in this project, a few manual steps are required:
+
+1. **Create a New Repository**  
+   - Set up a new repository in your team's Azure DevOps (ADO) repositories.  
+   - Push the code from this project to the newly created repository.  
+   - For detailed instructions, refer to the [repository setup documentation](<here>).
+
+2. **Set Up an Azure DevOps Pipeline**  
+   - Manually create a new Azure DevOps Pipeline in ADO.  
+   - Select the newly created repository and point it to the `azure-pipelines.yaml` file included in this project.  
+   - For step-by-step guidance, see the [pipeline setup documentation](<here>).
+
 ---
 
 ## Table of Contents
 
 - [Azure Builder Helper](#azure-builder-helper)
+  - [Important Steps](#important-steps)
+    - [Manual Steps for Deployment](#manual-steps-for-deployment)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
-  - [Prerequisites](#prerequisites)
+  - [Prerequisites (IMPORTANT)](#prerequisites-important)
   - [Installation](#installation)
   - [Usage](#usage)
   - [Examples](#examples)
@@ -26,7 +45,7 @@
 
 ---
 
-## Prerequisites
+## Prerequisites (IMPORTANT)
 
 - **Node.js** (version 14 or higher recommended)  
 - **npm** (version 6 or higher recommended)  

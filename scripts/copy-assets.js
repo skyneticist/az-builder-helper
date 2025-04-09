@@ -1,15 +1,19 @@
 #!/usr/bin/env node
+
 /**
- * Script to copy template assets from src/templates to dist/src/templates.
- * This ensures that non-TypeScript files (templates, etc.) are available in the build output.
+ * Script to copy static assets (e.g., templates, examples) to the build output directory.
  */
+import { execSync } from 'child_process';
 
-import path from 'path';
-import { copyDirectory } from '../src/utils/fileUtils.ts';
+try {
+  console.log('Copying templates...');
+  execSync('cp -R src/templates dist/templates', { stdio: 'inherit' });
 
-// Define source and destination directories for templates.
-const srcTemplates = path.join(process.cwd(), 'src', 'templates');
-const destTemplates = path.join(process.cwd(), 'dist', 'src', 'templates');
+  console.log('Copying examples...');
+  execSync('cp -R src/examples dist/examples', { stdio: 'inherit' });
 
-copyDirectory(srcTemplates, destTemplates);
-console.log('Template assets copied to dist.');
+  console.log('Assets copied successfully.');
+} catch (error) {
+  console.error('Failed to copy assets:', error.message);
+  process.exit(1);
+}
